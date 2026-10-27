@@ -6,12 +6,13 @@ stages:
 
 test-backend:
   stage: test
+  tags: 
+    - nginx-runner
   image: golang:1.25-alpine
   script:
     - cd backend
     - go vet ./...
     - go test ./...
-
 
 
 build-front:
