@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Demo App</title></head>
+<body>
+  <h1>Nginx + Go + PostgreSQL</h1>
+  <p id="status">Loading...</p>
+  <script>
+    fetch('/api/health')
+      .then(r => r.text())
+      .then(t => document.getElementById('status').innerText = t)
+      .catch(() => document.getElementById('status').innerText = 'Backend error');
+  </script>
+</body>
+</html>

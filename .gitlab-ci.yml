@@ -1,0 +1,41 @@
+stages:
+  - test
+  - build
+  - deploy
+
+
+test-backend:
+  stage: test
+  image: golang:1.25-alpine
+  script:
+    - cd backend
+    - go vet ./...
+    - go test ./...
+
+
+build-front:
+  stage: build
+  tag: app-runner
+  image: docker:27
+
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+
+  script:
+    - docker build -t frontend:$CI_COMMIT_SHORT_SHA ./frontend
+    - docker tag frontend:$CI_COMMIT_SHORT_SHA $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
+
+
+build-back:
+  stage: build
+  tag: app-runner
+  image: docker:27
+  
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+  
+  script:
+    - docker build -t backend:$CI_COMMIT_SHORT_SHA ./backend
+    - docker tag backend:$CI_COMMIT_SHORT_SHA  $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
