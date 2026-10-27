@@ -16,7 +16,8 @@ test-backend:
 
 build-front:
   stage: build
-  tag: nginx-runner
+  tags:
+    - nginx-runner
   image: docker:27
 
   before_script:
@@ -30,7 +31,8 @@ build-front:
 
 build-back:
   stage: build
-  tag: nginx-runner
+  tags:
+    - nginx-runner
   image: docker:27
   
   before_script:
