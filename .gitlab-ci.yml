@@ -13,9 +13,10 @@ test-backend:
     - go test ./...
 
 
+
 build-front:
   stage: build
-  tag: app-runner
+  tag: nginx-runner
   image: docker:27
 
   before_script:
@@ -29,7 +30,7 @@ build-front:
 
 build-back:
   stage: build
-  tag: app-runner
+  tag: nginx-runner
   image: docker:27
   
   before_script:
