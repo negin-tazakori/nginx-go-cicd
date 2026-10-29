@@ -61,7 +61,7 @@ deploy:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY_B64" | base64 -d > /tmp/id_key
     - chmod 600 /tmp/id_key
-    - ssh-add /tmp/id_ke
+    - ssh-add /tmp/id_key
     - mkdir -p ~/.ssh
     - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
 
