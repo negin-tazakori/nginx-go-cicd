@@ -30,6 +30,7 @@ build-front:
     - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
 
 
+
 build-back:
   stage: build
   tags:
@@ -44,6 +45,8 @@ build-back:
     - docker tag backend:$CI_COMMIT_SHORT_SHA  $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
     - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
 
+
+
 deploy:
   stage: deploy
   tags:
@@ -56,9 +59,11 @@ deploy:
     - sed -i 's#dl-cdn.alpinelinux.org#mirror.leaseweb.com#g' /etc/apk/repositories
     - apk add --no-cache openssh-client
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - chmod 600 "$SSH_PRIVATE_KEY"
+    - ssh-add "$SSH_PRIVATE_KEY"
     - mkdir -p ~/.ssh
     - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+
   script:
     - ssh $SERVER_USER@$SERVER_IP "mkdir -p ~/app"
     - scp docker-compose.yml $SERVER_USER@$SERVER_IP:~/app/docker-compose.yml
