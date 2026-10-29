@@ -59,8 +59,7 @@ deploy:
     - sed -i 's#dl-cdn.alpinelinux.org#mirror.leaseweb.com#g' /etc/apk/repositories
     - apk add --no-cache openssh-client
     - eval $(ssh-agent -s)
-    - chmod 600 "$SSH_PRIVATE_KEY"
-    - ssh-add "$SSH_PRIVATE_KEY"
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
 
